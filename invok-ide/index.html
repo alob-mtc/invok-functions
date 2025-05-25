@@ -617,7 +617,7 @@ func ${camelCaseName}Handler(w http.ResponseWriter, r *http.Request) {
           );
 
           // The endpoint based on server configuration
-          const uploadUrl = `${serverHost}/functions/upload`;
+          const uploadUrl = `${serverHost}/invok/deploy`;
           addLogLine("$", `Deploying to ${uploadUrl}...`);
 
           // Show progress with dots animation
@@ -676,7 +676,7 @@ func ${camelCaseName}Handler(w http.ResponseWriter, r *http.Request) {
             }
 
             // Add function URL information if available
-            const functionUrl = `${serverHost}/functions/${authSession.user_uuid}/invoke/${functionName}`;
+            const functionUrl = `${serverHost}/invok/${authSession.user_uuid}/${functionName}`;
 
             // Add service URL info
             addLogLine("INFO", "Service is now available at:");
