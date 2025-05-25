@@ -7,5 +7,5 @@ This repo contains an example invok(serverless) function that runs on a self-hos
 
 Functions:
 
-- [invok-demo-home-page-function](https://freeserverless.com/invok/c77a4aef-d1b8-4106-b582-27d69afbbf52/home-page)
-- [invok-playground](https://freeserverless.com/invok/c77a4aef-d1b8-4106-b582-27d69afbbf52/invok-ide)
+- [invok-demo-home-page-function](https://freeserverless.com/invok/72425d41-309d-48e3-845c-ca5534a3a17c/home-page)
+- [invok-playground](https://freeserverless.com/invok/72425d41-309d-48e3-845c-ca5534a3a17c/invok-ide)
