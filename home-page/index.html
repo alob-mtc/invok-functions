@@ -95,7 +95,7 @@
       }
 
       nav a::after {
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         height: 2px;
@@ -168,18 +168,13 @@
       }
 
       .btn::after {
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         height: 100%;
         top: 0;
         left: -100%;
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.2) 50%,
-          rgba(255, 255, 255, 0) 100%
-        );
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
         transition: left 0.5s ease;
       }
 
@@ -318,17 +313,13 @@
       }
 
       .arch-feature::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--primary) 0%,
-          var(--primary-light) 100%
-        );
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.3s ease;
@@ -482,8 +473,7 @@
         border-radius: 6px;
         padding: 16px;
         margin: 20px 0;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         font-size: 14px;
         line-height: 1.5;
         overflow-x: auto;
@@ -619,70 +609,117 @@
         border: 0;
       }
 
-      /* Mobile Navigation */
+      /* Mobile navigation styles */
       .mobile-nav-toggle {
         display: none;
         background: none;
         border: none;
-        font-size: 24px;
-        color: var(--text);
+        padding: 8px;
         cursor: pointer;
+        position: relative;
+        z-index: 100;
+      }
+
+      .hamburger {
+        width: 24px;
+        height: 18px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .hamburger-line {
+        width: 100%;
+        height: 2px;
+        background-color: var(--text);
+        transition: all 0.3s ease-in-out;
+        transform-origin: center;
       }
 
       @media (max-width: 768px) {
-        .container {
-          padding: 0 16px;
-        }
-
         .mobile-nav-toggle {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 40px;
-          height: 40px;
-          padding: 8px;
-          border-radius: 8px;
-          transition: background-color 0.2s;
-        }
-
-        .mobile-nav-toggle:hover {
-          background-color: var(--code-bg);
-        }
-
-        .mobile-nav-toggle:focus {
-          outline: 2px solid var(--primary);
-          outline-offset: 2px;
+          display: block;
         }
 
         nav {
-          transform: translateY(-10px);
-          opacity: 0;
-          visibility: hidden;
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 80%;
+          max-width: 300px;
+          height: 100vh;
+          background: white;
+          padding: 80px 32px 32px;
           transition: all 0.3s ease-in-out;
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+          z-index: 90;
         }
 
         nav.active {
-          transform: translateY(0);
-          opacity: 1;
-          visibility: visible;
+          right: 0;
         }
 
         nav ul {
           flex-direction: column;
-          gap: 16px;
+          gap: 24px;
         }
 
         nav a {
+          font-size: 18px;
           display: block;
           padding: 8px 0;
+        }
+
+        .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+          transform: translateY(8px) rotate(45deg);
+        }
+
+        .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+          opacity: 0;
+        }
+
+        .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+          transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Add overlay when menu is open */
+        .nav-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 80;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .nav-overlay.active {
+          display: block;
+          opacity: 1;
+        }
+
+        /* Adjust header for mobile */
+        .header-content {
+          padding: 12px 0;
         }
 
         .logo {
           font-size: 24px;
         }
 
-        .logo span:not(.poc-badge) {
-          display: none;
+        .logo svg {
+          width: 28px;
+          height: 28px;
+        }
+
+        .poc-badge {
+          font-size: 10px;
+          padding: 3px 8px;
         }
 
         .hero {
@@ -747,6 +784,134 @@
           font-size: 14px;
           padding: 12px;
           overflow-x: auto;
+        }
+      }
+
+      /* Prevent body scroll when menu is open */
+      body.menu-open {
+        overflow: hidden;
+      }
+
+      /* Terminal-like code block styles */
+      .terminal-code {
+        background: #1e1e2e;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+        position: relative;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow: hidden;
+      }
+
+      .terminal-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: #11111b;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        gap: 6px;
+      }
+
+      .terminal-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .terminal-dot.red { background: #f38ba8; }
+      .terminal-dot.yellow { background: #f9e2af; }
+      .terminal-dot.green { background: #a6e3a1; }
+
+      .terminal-content {
+        margin-top: 30px;
+        color: #cdd6f4;
+        padding: 8px 0;
+      }
+
+      .command-line {
+        display: flex;
+        margin: 8px 0;
+        align-items: flex-start;
+        position: relative;
+      }
+
+      .prompt {
+        color: #89b4fa;
+        margin-right: 10px;
+        user-select: none;
+      }
+
+      .command {
+        color: #cdd6f4;
+        flex: 1;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .output {
+        color: #bac2de;
+        margin: 8px 0 8px 25px;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .copy-button {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: #313244;
+        border: none;
+        border-radius: 4px;
+        color: #cdd6f4;
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .command-line:hover .copy-button {
+        opacity: 1;
+      }
+
+      .copy-button:hover {
+        background: #45475a;
+      }
+
+      .copy-button svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .copy-button.copied {
+        background: #a6e3a1;
+        color: #1e1e2e;
+      }
+
+      .copy-button.error {
+        background: #f38ba8;
+        color: #1e1e2e;
+      }
+
+      @media (max-width: 768px) {
+        .terminal-code {
+          font-size: 13px;
+          margin: 12px -16px;
+          border-radius: 0;
+        }
+
+        .copy-button {
+          opacity: 1;
         }
       }
 
@@ -837,161 +1002,7 @@
         background-color: rgba(37, 99, 235, 0.1);
         padding: 2px 6px;
         border-radius: 4px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          monospace;
-      }
-
-      /* Hamburger menu styles */
-      .hamburger {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 24px;
-        height: 18px;
-      }
-
-      .hamburger-line {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background-color: var(--text);
-        transition: transform 0.3s ease-in-out;
-      }
-
-      .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-      }
-
-      .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
-        opacity: 0;
-      }
-
-      .mobile-nav-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-      }
-
-      /* Terminal-like code block styles */
-      .terminal-code {
-        background: #1e1e2e;
-        border-radius: 8px;
-        padding: 16px;
-        margin: 16px 0;
-        position: relative;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 14px;
-        line-height: 1.5;
-        overflow: hidden;
-      }
-
-      .terminal-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 30px;
-        background: #11111b;
-        border-radius: 8px 8px 0 0;
-        display: flex;
-        align-items: center;
-        padding: 0 12px;
-        gap: 6px;
-      }
-
-      .terminal-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-      }
-
-      .terminal-dot.red {
-        background: #f38ba8;
-      }
-      .terminal-dot.yellow {
-        background: #f9e2af;
-      }
-      .terminal-dot.green {
-        background: #a6e3a1;
-      }
-
-      .terminal-content {
-        margin-top: 30px;
-        color: #cdd6f4;
-        padding: 8px 0;
-      }
-
-      .command-line {
-        display: flex;
-        margin: 8px 0;
-        align-items: flex-start;
-        position: relative;
-      }
-
-      .prompt {
-        color: #89b4fa;
-        margin-right: 10px;
-        user-select: none;
-      }
-
-      .command {
-        color: #cdd6f4;
-        flex: 1;
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-
-      .output {
-        color: #bac2de;
-        margin: 8px 0 8px 25px;
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-
-      .copy-button {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        background: #313244;
-        border: none;
-        border-radius: 4px;
-        color: #cdd6f4;
-        padding: 4px 8px;
-        font-size: 12px;
-        cursor: pointer;
-        opacity: 0;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .command-line:hover .copy-button {
-        opacity: 1;
-      }
-
-      .copy-button:hover {
-        background: #45475a;
-      }
-
-      .copy-button svg {
-        width: 14px;
-        height: 14px;
-      }
-
-      .copy-button.copied {
-        background: #a6e3a1;
-        color: #1e1e2e;
-      }
-
-      @media (max-width: 768px) {
-        .terminal-code {
-          font-size: 13px;
-          margin: 12px -16px;
-          border-radius: 0;
-        }
-
-        .copy-button {
-          opacity: 1;
-        }
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
     </style>
   </head>
@@ -1032,31 +1043,22 @@
             Invok<span>Framework</span>
             <span class="poc-badge">BETA</span>
           </div>
-          <button
-            class="mobile-nav-toggle"
-            aria-label="Toggle navigation"
-            aria-expanded="false"
-          >
-            <span class="hamburger">
+          <button class="mobile-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <div class="hamburger">
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
-            </span>
+            </div>
           </button>
           <nav>
             <ul>
               <li><a href="#features">Features</a></li>
               <li><a href="#architecture">Architecture</a></li>
               <li><a href="#quickstart">Quick Start</a></li>
-              <li>
-                <a
-                  href="https://github.com/alob-mtc/invok/blob/main/Readme.md"
-                  target="_blank"
-                  >Docs</a
-                >
-              </li>
+              <li><a href="https://github.com/alob-mtc/invok/blob/main/Readme.md" target="_blank">Docs</a></li>
             </ul>
           </nav>
+          <div class="nav-overlay"></div>
         </div>
       </div>
     </header>
@@ -1162,30 +1164,12 @@
         </p>
         <div class="architecture-details">
           <div class="arch-feature">
-            <svg
-              class="arch-feature-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path
-                d="M12 6V12L16 14"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+            <svg class="arch-feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <h3>API Controller</h3>
-            <p>
-              High-performance core written in Rust, handling request routing,
-              function management, and system operations.
-            </p>
+            <p>High-performance core written in Rust, handling request routing, function management, and system operations.</p>
             <ul>
               <li>Async request handling</li>
               <li>Built-in load balancing</li>
@@ -1195,35 +1179,13 @@
           </div>
 
           <div class="arch-feature">
-            <svg
-              class="arch-feature-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-              <path
-                d="M7 10L17 10"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-              <path
-                d="M7 14L13 14"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
+            <svg class="arch-feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M7 10L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M7 14L13 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             <h3>Function Runtime</h3>
-            <p>
-              Secure, isolated execution environment for your functions using
-              containerization technology.
-            </p>
+            <p>Secure, isolated execution environment for your functions using containerization technology.</p>
             <ul>
               <li>Docker-based isolation</li>
               <li>Automatic scaling</li>
@@ -1232,24 +1194,11 @@
           </div>
 
           <div class="arch-feature">
-            <svg
-              class="arch-feature-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M18 3V21M6 3V21M3 12H21M3 6H21M3 18H21"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
+            <svg class="arch-feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 3V21M6 3V21M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             <h3>CLI Tool</h3>
-            <p>
-              Developer-friendly command line interface for managing your
-              serverless applications.
-            </p>
+            <p>Developer-friendly command line interface for managing your serverless applications.</p>
             <ul>
               <li>Project scaffolding</li>
               <li>Function deployment</li>
@@ -1312,19 +1261,10 @@
               <div class="terminal-content">
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker pull bolamigbe/invok:latest</span
-                  >
+                  <span class="command">docker pull bolamigbe/invok:latest</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1332,20 +1272,10 @@
 
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest --help</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest --help</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1356,10 +1286,7 @@
           <div class="step">
             <div class="step-number">3</div>
             <h3>Authentication</h3>
-            <p>
-              Register a new account or login to start creating and deploying
-              functions:
-            </p>
+            <p>Register a new account or login to start creating and deploying functions:</p>
             <div class="terminal-code">
               <div class="terminal-header">
                 <div class="terminal-dot red"></div>
@@ -1369,21 +1296,10 @@
               <div class="terminal-content">
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest register -e your@email.com -p
-                    yourpassword</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest register -e your@email.com -p yourpassword</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1391,21 +1307,10 @@
 
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest login -e your@email.com -p
-                    yourpassword</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest login -e your@email.com -p yourpassword</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1413,31 +1318,18 @@
 
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest logout</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest logout</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
                 </div>
               </div>
             </div>
-
             <div class="auth-note">
-              Authentication tokens are stored in
-              <code>.serverless-cli-auth</code> in your current directory when
-              using Docker.
+              Authentication tokens are stored in <code>.serverless-cli-auth</code> in your current directory when using Docker.
             </div>
           </div>
           <div class="step">
@@ -1453,20 +1345,10 @@
               <div class="terminal-content">
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest create -n my-function -r go</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest create -n my-function -r go</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1474,20 +1356,10 @@
 
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest deploy -n my-function</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest deploy -n my-function</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1495,20 +1367,10 @@
 
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest list</span
-                  >
+                  <span class="command">docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest list</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1529,20 +1391,10 @@
               <div class="terminal-content">
                 <div class="command-line">
                   <span class="prompt">$</span>
-                  <span class="command"
-                    >alias invok='docker run --rm -v $(pwd):/app -w /app
-                    bolamigbe/invok:latest'</span
-                  >
+                  <span class="command">alias invok='docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest'</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1552,15 +1404,8 @@
                   <span class="prompt">$</span>
                   <span class="command">invok create -n my-function</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1570,15 +1415,8 @@
                   <span class="prompt">$</span>
                   <span class="command">invok deploy -n my-function</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1588,15 +1426,8 @@
                   <span class="prompt">$</span>
                   <span class="command">invok list</span>
                   <button class="copy-button">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"
-                      />
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M16 5H18C19.1046 5 20 5.89543 20 7V13"/>
                     </svg>
                     Copy
                   </button>
@@ -1664,39 +1495,81 @@
 
     <script>
       // Mobile navigation toggle
-      const nav = document.querySelector("nav");
-      const toggle = document.querySelector(".mobile-nav-toggle");
-      const navLinks = document.querySelectorAll("nav a");
+      const nav = document.querySelector('nav');
+      const toggle = document.querySelector('.mobile-nav-toggle');
+      const navLinks = document.querySelectorAll('nav a');
+      const overlay = document.querySelector('.nav-overlay');
+      const body = document.body;
+
+      function closeMenu() {
+        nav.classList.remove('active');
+        overlay.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        body.classList.remove('menu-open');
+      }
+
+      function openMenu() {
+        nav.classList.add('active');
+        overlay.classList.add('active');
+        toggle.setAttribute('aria-expanded', 'true');
+        body.classList.add('menu-open');
+      }
 
       // Toggle menu
-      toggle.addEventListener("click", (e) => {
+      toggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        nav.classList.toggle("active");
-        toggle.setAttribute("aria-expanded", nav.classList.contains("active"));
+        if (nav.classList.contains('active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
       });
 
       // Close menu when clicking a link
-      navLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-          nav.classList.remove("active");
-          toggle.setAttribute("aria-expanded", "false");
-        });
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
       });
 
-      // Close menu when clicking outside
-      document.addEventListener("click", (e) => {
-        if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-          nav.classList.remove("active");
-          toggle.setAttribute("aria-expanded", "false");
-        }
-      });
+      // Close menu when clicking overlay
+      overlay.addEventListener('click', closeMenu);
 
       // Close menu when pressing Escape key
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && nav.classList.contains("active")) {
-          nav.classList.remove("active");
-          toggle.setAttribute("aria-expanded", "false");
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+          closeMenu();
         }
+      });
+
+      // Copy functionality for terminal commands
+      document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-button');
+        
+        copyButtons.forEach(button => {
+          button.addEventListener('click', async () => {
+            const command = button.closest('.command-line').querySelector('.command').textContent;
+            
+            try {
+              await navigator.clipboard.writeText(command);
+              const originalHTML = button.innerHTML;
+              button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17L4 12"/></svg> Copied!';
+              button.classList.add('copied');
+              
+              setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('copied');
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy:', err);
+              button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> Error!';
+              button.classList.add('error');
+              
+              setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('error');
+              }, 2000);
+            }
+          });
+        });
       });
     </script>
   </body>
