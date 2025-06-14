@@ -3,17 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Serverless Framework (POC)</title>
+    <title>Invok - Modern Serverless Framework</title>
     <style>
       :root {
-        --primary: #5965e0;
-        --primary-light: #7380f5;
-        --secondary: #24292e;
-        --text: #333;
-        --text-light: #666;
-        --background: #f9f9fb;
-        --code-bg: #f1f1f1;
-        --border: #eaeaea;
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
+        --primary-dark: #1d4ed8;
+        --secondary: #1e293b;
+        --text: #1e293b;
+        --text-light: #64748b;
+        --background: #f8fafc;
+        --code-bg: #f1f5f9;
+        --border: #e2e8f0;
+        --success: #059669;
+        --warning: #d97706;
+        --error: #dc2626;
       }
 
       * {
@@ -23,23 +27,24 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", sans-serif;
         line-height: 1.6;
         color: var(--text);
         background-color: var(--background);
       }
 
       .container {
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0 24px;
       }
 
       header {
-        padding: 30px 0;
-        background-color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         position: sticky;
         top: 0;
         z-index: 100;
@@ -52,9 +57,12 @@
       }
 
       .logo {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 700;
         color: var(--secondary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .logo span {
@@ -62,23 +70,19 @@
       }
 
       .poc-badge {
-        background-color: #ffebee;
-        color: #e53935;
-        padding: 3px 8px;
-        border-radius: 4px;
+        background-color: #fef2f2;
+        color: var(--error);
+        padding: 4px 10px;
+        border-radius: 9999px;
         font-size: 12px;
         font-weight: 600;
-        vertical-align: middle;
-        margin-left: 8px;
+        letter-spacing: 0.025em;
       }
 
       nav ul {
         display: flex;
         list-style: none;
-      }
-
-      nav li {
-        margin-left: 30px;
+        gap: 32px;
       }
 
       nav a {
@@ -86,6 +90,7 @@
         color: var(--text);
         font-weight: 500;
         transition: color 0.2s;
+        font-size: 16px;
       }
 
       nav a:hover {
@@ -93,31 +98,53 @@
       }
 
       .hero {
-        padding: 100px 0;
-        background: linear-gradient(135deg, white, var(--background));
+        padding: 120px 0;
+        background: linear-gradient(to bottom, #ffffff, var(--background));
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232563eb' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
         text-align: center;
       }
 
       .hero h1 {
-        font-size: 48px;
-        margin-bottom: 20px;
+        font-size: 56px;
+        line-height: 1.1;
+        margin-bottom: 24px;
         color: var(--secondary);
+        font-weight: 800;
       }
 
       .hero p {
         font-size: 20px;
         color: var(--text-light);
-        max-width: 700px;
+        max-width: 800px;
         margin: 0 auto 40px;
       }
 
       .btn {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 12px 24px;
-        border-radius: 6px;
+        border-radius: 8px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s;
+        gap: 8px;
       }
 
       .btn-primary {
@@ -126,21 +153,21 @@
       }
 
       .btn-primary:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(89, 101, 224, 0.3);
+        background-color: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
       }
 
       .btn-secondary {
         background-color: white;
         color: var(--primary);
-        border: 1px solid var(--primary);
-        margin-left: 15px;
+        border: 2px solid var(--primary);
+        margin-left: 16px;
       }
 
       .btn-secondary:hover {
-        background-color: rgba(89, 101, 224, 0.05);
-        transform: translateY(-2px);
+        background-color: rgba(37, 99, 235, 0.05);
+        transform: translateY(-1px);
       }
 
       .section {
@@ -150,8 +177,9 @@
       .section-title {
         text-align: center;
         font-size: 36px;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
         color: var(--secondary);
+        font-weight: 800;
       }
 
       .features {
@@ -196,24 +224,117 @@
       }
 
       .architecture {
-        text-align: center;
         background-color: white;
+        position: relative;
+        overflow: hidden;
+        padding: 80px 0;
       }
 
-      .architecture img {
+      .architecture::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(37, 99, 235, 0.05) 0%,
+          rgba(37, 99, 235, 0) 100%
+        );
+        z-index: 0;
+      }
+
+      .architecture > .container {
+        position: relative;
+        z-index: 1;
+      }
+
+      .architecture-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        margin: 48px 0;
+      }
+
+      .arch-feature {
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        text-align: left;
+        transition: transform 0.3s ease;
+      }
+
+      .arch-feature:hover {
+        transform: translateY(-5px);
+      }
+
+      .arch-feature-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 20px;
+        color: var(--primary);
+      }
+
+      .arch-feature h3 {
+        color: var(--primary);
+        margin-bottom: 16px;
+        font-size: 24px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .arch-feature p {
+        color: var(--text-light);
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .arch-feature ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .arch-feature li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      .arch-feature li::before {
+        content: "•";
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      .arch-diagram-container {
+        margin-top: 64px;
+        position: relative;
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .arch-diagram {
         max-width: 100%;
+        height: auto;
         border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       }
 
-      .code-block {
-        background-color: var(--code-bg);
-        padding: 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
-        font-size: 14px;
-        overflow-x: auto;
+      .arch-diagram-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 24px;
+        text-align: center;
       }
 
       .quickstart {
@@ -226,16 +347,16 @@
       }
 
       .step {
-        margin-bottom: 30px;
-        padding-left: 40px;
+        margin-bottom: 40px;
+        padding-left: 48px;
         position: relative;
       }
 
       .step-number {
         position: absolute;
         left: 0;
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         background-color: var(--primary);
         color: white;
         border-radius: 50%;
@@ -246,57 +367,125 @@
       }
 
       .step h3 {
-        margin-bottom: 10px;
+        margin-bottom: 16px;
+        color: var(--secondary);
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .code-block {
+        background-color: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        font-family: "JetBrains Mono", "Fira Code", "Monaco", monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-x: auto;
+        border: 1px solid var(--border);
+      }
+
+      .section-description {
+        text-align: center;
+        color: var(--text-light);
+        max-width: 700px;
+        margin: 0 auto 40px;
+        font-size: 18px;
       }
 
       .cta {
         text-align: center;
         background: linear-gradient(
           135deg,
-          var(--primary-light),
-          var(--primary)
+          var(--primary) 0%,
+          var(--primary-dark) 100%
         );
         color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+      }
+
+      .cta > .container {
+        position: relative;
+        z-index: 1;
       }
 
       .cta h2 {
         color: white;
-        margin-bottom: 30px;
+        margin-bottom: 16px;
+        font-size: 36px;
+        font-weight: 800;
+      }
+
+      .cta p {
+        font-size: 20px;
+        margin-bottom: 32px;
+        opacity: 0.9;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
       }
 
       .cta .btn-secondary {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: transparent;
         color: white;
-        border-color: white;
+        border-color: rgba(255, 255, 255, 0.5);
       }
 
       .cta .btn-secondary:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: white;
       }
 
       footer {
         background-color: var(--secondary);
         color: white;
-        padding: 50px 0;
-        text-align: center;
+        padding: 60px 0 40px;
       }
 
       .footer-links {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        gap: 32px;
+        margin-bottom: 32px;
       }
 
       .footer-links a {
         color: white;
-        margin: 0 15px;
         text-decoration: none;
         opacity: 0.8;
         transition: opacity 0.2s;
+        font-weight: 500;
       }
 
       .footer-links a:hover {
         opacity: 1;
+      }
+
+      footer p {
+        text-align: center;
+        opacity: 0.8;
+        margin-bottom: 8px;
+      }
+
+      footer p:last-child {
+        margin-top: 24px;
+        opacity: 0.6;
+        font-size: 14px;
       }
 
       .video-container {
@@ -324,6 +513,12 @@
         font-size: 24px;
         color: var(--secondary);
         cursor: pointer;
+      }
+
+      @media (max-width: 1024px) {
+        .architecture-details {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       @media (max-width: 768px) {
@@ -360,7 +555,7 @@
         }
 
         .hero h1 {
-          font-size: 36px;
+          font-size: 40px;
         }
 
         .hero p {
@@ -407,11 +602,31 @@
           height: 24px;
           font-size: 14px;
         }
+
+        .cta-buttons {
+          flex-direction: column;
+          padding: 0 20px;
+        }
+
+        .footer-links {
+          flex-wrap: wrap;
+          gap: 16px;
+          padding: 0 20px;
+        }
+
+        .architecture-details {
+          grid-template-columns: 1fr;
+        }
+
+        .arch-feature {
+          padding: 24px;
+        }
       }
 
       @media (max-width: 480px) {
         .hero h1 {
-          font-size: 28px;
+          font-size: 32px;
+          padding: 0 20px;
         }
 
         .hero p {
@@ -425,6 +640,78 @@
         .header-content {
           padding: 0 15px;
         }
+
+        .section-title {
+          font-size: 28px;
+          padding: 0 20px;
+        }
+
+        .feature-card {
+          margin: 0 20px;
+        }
+
+        .step {
+          margin: 0 20px 40px;
+        }
+      }
+
+      .next-steps-list {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0;
+      }
+
+      .next-steps-list li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        color: var(--text);
+      }
+
+      .next-steps-list li::before {
+        content: "→";
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      .next-steps-list code {
+        background: var(--code-bg);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 14px;
+      }
+
+      .auth-note {
+        font-size: 14px;
+        color: var(--text-light);
+        margin-top: 16px;
+        padding: 16px;
+        background: rgba(37, 99, 235, 0.05);
+        border-left: 4px solid var(--primary);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        line-height: 1.6;
+      }
+
+      .auth-note::before {
+        content: "ℹ️";
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .auth-note code {
+        display: inline;
+        background: rgba(37, 99, 235, 0.1);
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        color: var(--primary);
+        font-size: 13px;
+        white-space: nowrap;
       }
     </style>
   </head>
@@ -433,15 +720,51 @@
       <div class="container">
         <div class="header-content">
           <div class="logo">
-            Serverless<span>Framework</span>
-            <span class="poc-badge">POC</span>
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2L2 7L12 12L22 7L12 2Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M2 17L12 22L22 17"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M2 12L12 17L22 12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Invok<span>Framework</span>
+            <span class="poc-badge">BETA</span>
           </div>
-          <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+          <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+            ☰
+          </button>
           <nav>
             <ul>
               <li><a href="#features">Features</a></li>
               <li><a href="#architecture">Architecture</a></li>
-              <li><a href="#quickstart">Quickstart</a></li>
+              <li><a href="#quickstart">Quick Start</a></li>
+              <li>
+                <a href="https://github.com/alob-mtc/invok/wiki" target="_blank"
+                  >Docs</a
+                >
+              </li>
             </ul>
           </nav>
         </div>
@@ -449,73 +772,90 @@
     </header>
 
     <section class="hero">
-      <div class="container">
-        <h1>Deploy Serverless Functions on Your Own Terms</h1>
+      <div class="container hero-content">
+        <h1>Build and Deploy<br />Serverless Functions with Confidence</h1>
         <p>
-          A modern, lightweight, and self-hosted serverless framework that lets
-          you deploy and run functions without managing servers.
+          Invok is a modern, open-source serverless framework that gives you
+          complete control over your infrastructure. Deploy functions locally or
+          to your own cloud with enterprise-grade security and performance.
         </p>
         <div>
-          <a
-            href="https://github.com/alob-mtc/serverless-framework"
-            class="btn btn-primary"
-            >Get Started</a
-          >
-          <a href="#demo" class="btn btn-secondary">Watch Demo</a>
+          <a href="https://github.com/alob-mtc/invok" class="btn btn-primary">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              />
+            </svg>
+            Get Started
+          </a>
+          <a href="#demo" class="btn btn-secondary">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
+            </svg>
+            Watch Demo
+          </a>
         </div>
       </div>
     </section>
 
     <section class="section" id="features">
       <div class="container">
-        <h2 class="section-title">Key Features</h2>
+        <h2 class="section-title">Why Choose Invok?</h2>
         <div class="features">
           <div class="feature-card">
-            <div class="feature-icon">🏠</div>
-            <h3>Self-hosted</h3>
+            <div class="feature-icon">🏢</div>
+            <h3>Enterprise-Ready</h3>
             <p>
-              Run everything on your own infrastructure with no vendor lock-in,
-              giving you complete control.
-            </p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🛠️</div>
-            <h3>Simple Developer Experience</h3>
-            <p>
-              Easy-to-use CLI tool for creating, deploying, and managing your
-              serverless functions.
+              Built with enterprise requirements in mind. Secure, scalable, and
+              compliant with industry standards. (WIP)
             </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🔒</div>
-            <h3>Secure by Design</h3>
+            <h3>Advanced Security</h3>
             <p>
-              JWT-based authentication and secure function isolation with Docker
-              containers.
+              JWT-based authentication, role-based access control, and secure
+              function isolation using Docker containers.
             </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">⚡</div>
-            <h3>Lightweight</h3>
+            <h3>High Performance</h3>
             <p>
-              Optimized for performance with minimal overhead, keeping your
-              functions fast.
+              Optimized for speed with minimal cold starts. Built in Rust for
+              maximum efficiency and reliability.
             </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🔄</div>
-            <h3>Hot Reloading</h3>
+            <h3>Modern Developer Experience</h3>
             <p>
-              Quick iteration on your function code with hot reloading
-              capabilities.
+              Hot reloading, TypeScript support, and a powerful CLI for seamless
+              development workflow.
             </p>
           </div>
           <div class="feature-card">
-            <div class="feature-icon">🔌</div>
-            <h3>Docker-based Isolation</h3>
+            <div class="feature-icon">📦</div>
+            <h3>Container-Native</h3>
             <p>
-              Each function runs in its own container for security and
-              dependency isolation.
+              Leverage Docker for consistent environments, easy scaling,
+              security, and reliable deployments.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3>Platform Agnostic</h3>
+            <p>
+              Deploy anywhere - local development, private cloud, or major cloud
+              providers. No vendor lock-in.
             </p>
           </div>
         </div>
@@ -524,75 +864,211 @@
 
     <section class="section architecture" id="architecture">
       <div class="container">
-        <h2 class="section-title">Architecture</h2>
-        <p>
-          Our serverless framework consists of an API Controller, CLI Tool, and
-          Docker-based function runtime.
+        <h2 class="section-title">Modern Architecture</h2>
+        <p class="section-description">
+          Invok is built with a modular, scalable architecture that leverages
+          modern technologies and best practices. Each component is designed for
+          maximum performance, security, and developer experience.
         </p>
-        <img
-          src="https://res.cloudinary.com/dukabills/image/upload/v1744150290/serverless_bo2zwr.png"
-          alt="Serverless Architecture"
-        />
+        <div class="architecture-details">
+          <div class="arch-feature">
+            <svg
+              class="arch-feature-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M12 7V12L15 15"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>API Controller</h3>
+            <p>
+              High-performance core written in Rust, handling request routing,
+              function management, and system operations.
+            </p>
+            <ul>
+              <li>Async request handling</li>
+              <li>Built-in load balancing</li>
+              <li>Function lifecycle management</li>
+              <li>Real-time metrics and logging</li>
+            </ul>
+          </div>
+          <div class="arch-feature">
+            <svg
+              class="arch-feature-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M7 10L17 10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M7 14L13 14"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>Function Runtime</h3>
+            <p>
+              Secure, isolated execution environment for your functions using
+              containerization technology.
+            </p>
+            <ul>
+              <li>Docker-based isolation</li>
+              <li>Automatic scaling</li>
+              <li>Resource management</li>
+            </ul>
+          </div>
+          <div class="arch-feature">
+            <svg
+              class="arch-feature-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 3V21M6 3V21M3 12H21M3 6H21M3 18H21"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>CLI Tool</h3>
+            <p>
+              Developer-friendly command line interface for managing your
+              serverless applications.
+            </p>
+            <ul>
+              <li>Project scaffolding</li>
+              <li>Function deployment</li>
+              <li>Environment management</li>
+              <li>Local development tools</li>
+            </ul>
+          </div>
+        </div>
+        <div class="arch-diagram-container">
+          <h4 class="arch-diagram-title">System Architecture Overview</h4>
+          <img
+            src="https://res.cloudinary.com/dukabills/image/upload/v1744150290/serverless_bo2zwr.png"
+            alt="Invok Architecture Diagram"
+            class="arch-diagram"
+          />
+        </div>
       </div>
     </section>
 
     <section class="section quickstart" id="quickstart">
       <div class="container">
-        <h2 class="section-title">Quick Start</h2>
+        <h2 class="section-title">Quick Start Guide</h2>
+        <p class="section-description">
+          Get started with Invok in minutes using our Docker-based approach.
+          Choose between our online playground for instant testing or local
+          deployment for full control.
+        </p>
         <div class="quickstart-steps">
           <div class="step">
             <div class="step-number">1</div>
-            <h3>Run the API Controller</h3>
-            <p>
-              Start the API controller and dependencies with Docker Compose:
-            </p>
+            <h3>Try Online (No Installation)</h3>
+            <p>Test Invok instantly using our web-based playground:</p>
             <div class="code-block">
-              # Clone the repository<br />
-              git clone https://github.com/alob-mtc/invok.git<br />
-              cd invok<br /><br />
-              # Start the Serverless Core and dependencies with Docker
-              Compose<br />
-              docker-compose up -d<br /><br />
-              # Start the API controller<br />
-              cargo run -p serverless_core
+              # Visit our online playground<br />
+              <a
+                href="https://freeserverless.com/invok/72425d41-309d-48e3-845c-ca5534a3a17c/invok-ide"
+                target="_blank"
+                style="color: var(--primary)"
+                >Invok Online Playground</a
+              ><br /><br />
+              # Or try our demo function<br />
+              <a
+                href="https://freeserverless.com/invok/72425d41-309d-48e3-845c-ca5534a3a17c/home-page"
+                target="_blank"
+                style="color: var(--primary)"
+                >Demo Function</a
+              >
             </div>
           </div>
           <div class="step">
             <div class="step-number">2</div>
-            <h3>Install the CLI</h3>
-            <p>Build and install the command-line interface:</p>
+            <h3>Local Setup with Docker</h3>
+            <p>Pull and use our Docker image:</p>
             <div class="code-block">
-              # Build the CLI<br />
-              cd cli<br />
-              cargo build --release<br /><br />
-              # Move to your PATH (optional)<br />
-              cp target/release/serverless-cli /usr/local/bin
+              # Pull the image<br />
+              docker pull bolamigbe/invok:latest<br /><br />
+              # Show available commands<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              --help
             </div>
           </div>
           <div class="step">
             <div class="step-number">3</div>
-            <h3>Deploy Your First Function</h3>
-            <p>Create and deploy a simple function:</p>
+            <h3>Authentication</h3>
+            <p>
+              Register a new account or login to start creating and deploying
+              functions:
+            </p>
             <div class="code-block">
-              # Register a user account<br />
-              serverless-cli register --email user@example.com --password
-              your_password<br /><br />
-              # Login<br />
-              serverless-cli login --email user@example.com --password
-              your_password<br /><br />
-              # Create a new function<br />
-              serverless-cli create-function -n hello-world<br /><br />
-              # Deploy your function<br />
-              serverless-cli deploy-function -n hello-world
+              # Register a new account<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              register -e your@email.com -p yourpassword<br /><br />
+              # Or login if you already have an account<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              login -e your@email.com -p yourpassword<br /><br />
+              # To logout when needed<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              logout
+            </div>
+            <div class="auth-note">
+              Authentication tokens are stored in
+              <code>.serverless-cli-auth</code> in your current directory when
+              using Docker.
             </div>
           </div>
           <div class="step">
             <div class="step-number">4</div>
-            <h3>List Function</h3>
-            <p>list all deployed functions:</p>
+            <h3>Create and Deploy</h3>
+            <p>Create and deploy your first function:</p>
             <div class="code-block">
-              # List your deployed functions<br />
-              serverless-cli list<br /><br />
+              # Create a new function (Go runtime)<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              create -n my-function -r go<br /><br />
+              # Deploy your function<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest
+              deploy -n my-function<br /><br />
+              # List your functions<br />
+              docker run --rm -v $(pwd):/app -w /app bolamigbe/invok:latest list
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">5</div>
+            <h3>Optional: Shell Setup</h3>
+            <p>For convenience, add this alias to your shell configuration:</p>
+            <div class="code-block">
+              # Add to ~/.bashrc or ~/.zshrc<br />
+              alias invok='docker run --rm -v $(pwd):/app -w /app
+              bolamigbe/invok:latest'<br /><br />
+              # Then use it like a native command<br />
+              invok create -n my-function<br />
+              invok deploy -n my-function<br />
+              invok list
             </div>
           </div>
         </div>
@@ -601,12 +1077,17 @@
 
     <section class="section" id="demo">
       <div class="container">
-        <h2 class="section-title">See It in Action</h2>
-        <p>Watch a quick demonstration of the serverless framework in use:</p>
+        <h2 class="section-title">See Invok in Action</h2>
+        <p class="section-description">
+          Watch how easy it is to build and deploy serverless functions with
+          Invok:
+        </p>
         <div class="video-container">
           <iframe
             src="https://www.youtube.com/embed/qLKV_cO_XhQ"
+            title="Invok Framework Demo"
             frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
         </div>
@@ -615,48 +1096,53 @@
 
     <section class="section cta">
       <div class="container">
-        <h2>Ready to Get Started?</h2>
-        <a
-          href="https://github.com/alob-mtc/serverless-framework"
-          class="btn btn-primary"
-          >View on GitHub</a
-        >
-        <a
-          href="https://github.com/alob-mtc/serverless-framework/blob/main/Readme.md"
-          class="btn btn-secondary"
-          >Read Documentation</a
-        >
+        <h2>Ready to Build Serverless?</h2>
+        <p>Start building scalable applications with Invok today.</p>
+        <div class="cta-buttons">
+          <a href="https://github.com/alob-mtc/invok" class="btn btn-primary">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              />
+            </svg>
+            View on GitHub
+          </a>
+          <a
+            href="https://github.com/alob-mtc/invok/wiki"
+            class="btn btn-secondary"
+            >Read Documentation</a
+          >
+        </div>
       </div>
     </section>
 
     <footer>
       <div class="container">
         <div class="footer-links">
-          <a href="https://github.com/alob-mtc/serverless-framework">GitHub</a>
-          <a
-            href="https://github.com/alob-mtc/serverless-framework/blob/main/Readme.md"
-            >Documentation</a
-          >
+          <a href="https://github.com/alob-mtc/invok">GitHub</a>
+          <a href="https://github.com/alob-mtc/invok/wiki">Documentation</a>
           <a href="#features">Features</a>
           <a href="#quickstart">Quick Start</a>
         </div>
-        <p>This project is a proof of concept and not production-ready.</p>
-        <p>&copy; 2023 Serverless Framework. All rights reserved.</p>
+        <p>Invok is currently in beta. Use in production with caution.</p>
+        <p>&copy; 2024 Invok Framework. All rights reserved.</p>
       </div>
     </footer>
 
     <script>
       // Mobile navigation toggle
-      document.querySelector('.mobile-nav-toggle').addEventListener('click', function() {
-        document.querySelector('nav').classList.toggle('active');
-      });
+      document
+        .querySelector(".mobile-nav-toggle")
+        .addEventListener("click", function () {
+          document.querySelector("nav").classList.toggle("active");
+        });
 
       // Close mobile menu when clicking outside
-      document.addEventListener('click', function(event) {
-        const nav = document.querySelector('nav');
-        const toggle = document.querySelector('.mobile-nav-toggle');
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector("nav");
+        const toggle = document.querySelector(".mobile-nav-toggle");
         if (!nav.contains(event.target) && !toggle.contains(event.target)) {
-          nav.classList.remove('active');
+          nav.classList.remove("active");
         }
       });
     </script>

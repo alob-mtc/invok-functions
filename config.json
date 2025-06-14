@@ -1,4 +1,1 @@
-{
-  "function_name": ["home-page", "invok-ide"],
-  "runtime": "go"
-}
+{"function_name":["home-page","invok-ide","hello-world"],"runtime":"go"}
